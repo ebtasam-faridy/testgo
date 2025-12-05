@@ -1,19 +1,30 @@
-import time
 import sys
 import datetime
-# No need for manual flush() calls with 'python -u'
 
-time.sleep(300)
-i = 0
-while True:
-    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+# Define the number of log lines to generate
+NUM_LOG_LINES = 20000
+
+current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+print(f"--- Application started: Generating {NUM_LOG_LINES} log lines ---")
+sys.stdout.flush() # Ensure the header is sent
+
+# Loop to generate the large burst of logs
+for i in range(1, NUM_LOG_LINES + 1):
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] # More precise timestamp
     
-    # Logs will now stream immediately because of the -u flag in the Dockerfile
-    print(f"{current_time} [INFO] Cycle {i}: Service is running and logging.")
+    # Log to STDOUT
+    print(f"{timestamp} [BURST_INFO] Log Line {i:05d} of {NUM_LOG_LINES}. Testing log throughput.")
+    
+    # Optionally generate an error log every 1000 lines
+    if i % 1000 == 0:
+        print(f"{timestamp} [BURST_WARN] Checkpoint warning at line {i}.", file=sys.stderr)
+        
+# Note: Since we are using 'python -u' in the Dockerfile, the output is unbuffered
+# and the flush() call is technically not required, but good practice if needed.
+sys.stdout.flush()
+sys.stderr.flush()
 
-    if i % 5 == 0 and i > 0:
-        # Logs to stderr stream
-        print(f"{current_time} [WARN] A background process warning on cycle {i}.", file=sys.stderr)
+print(f"--- Finished generating {NUM_LOG_LINES} log lines. Application exiting. ---")
 
-    i += 1
-    time.sleep(5)
+# The script exits here, causing the container to stop.
