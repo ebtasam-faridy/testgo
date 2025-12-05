@@ -3,6 +3,7 @@ import sys
 import datetime
 # No need for manual flush() calls with 'python -u'
 
+time.sleep(5)
 i = 0
 while True:
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
