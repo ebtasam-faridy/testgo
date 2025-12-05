@@ -15,3 +15,4 @@ while True:
         print(f"{current_time} [WARN] A background process warning on cycle {i}.", file=sys.stderr)
 
     i += 1
+    time.sleep(2)
