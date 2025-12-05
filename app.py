@@ -2,7 +2,7 @@ import sys
 import datetime
 
 # Define the number of log lines to generate
-NUM_LOG_LINES = 100000
+NUM_LOG_LINES = 10000000
 
 current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
