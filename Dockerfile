@@ -1,14 +1,16 @@
 FROM alpine:latest
 
-# Number of logs
-ENV LOG_COUNT=1000
+# Install bash for nicer scripting (optional)
+RUN apk add --no-cache bash
 
-# CMD that prints logs at runtime
-CMD sh -c '
-  echo "Starting runtime log container...";
-  for i in $(seq 1 $LOG_COUNT); do
-    echo "Log line $i - $(date)";
-    echo "ERROR: something failed at line $i" >&2;
-  done;
-  echo "Completed $LOG_COUNT logs."
+CMD bash -c '
+  i=1
+  echo "Starting infinite log container..."
+  while true; do
+    echo "Log line $i - $(date)"
+    echo "Random number: $RANDOM"
+    echo "ERROR: simulated error at line $i" >&2
+    i=$((i+1))
+    sleep 0.2
+  done
 '
