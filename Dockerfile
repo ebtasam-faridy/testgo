@@ -1,16 +1,12 @@
-FROM alpine:latest
+# Use a lean base image for your application
+FROM python:3.9-slim
 
-# Install bash for nicer scripting (optional)
-RUN apk add --no-cache bash
+# Set the working directory inside the container
+WORKDIR /app
 
-CMD bash -c '
-  i=1
-  echo "Starting infinite log container..."
-  while true; do
-    echo "Log line $i - $(date)"
-    echo "Random number: $RANDOM"
-    echo "ERROR: simulated error at line $i" >&2
-    i=$((i+1))
-    sleep 0.2
-  done
-'
+# Copy the application code into the image
+COPY app.py .
+
+# Command to run the application
+# This is the command whose STDOUT/STDERR is captured by Harness
+CMD ["python", "app.py"]
